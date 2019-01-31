@@ -18,7 +18,7 @@ if [ "$(uname)" == "Darwin" ]; then
     # Homebrew
     if [ ! -d "${HOME}/opt/homebrew" ]; then
         mkdir "${HOME}/opt/homebrew"
-        (cd ~/opt && curl -L https://github.com/Homebrew/homebrew/tarball/master | tar xz --strip 1 -C homebrew)
+        (cd ~/opt && curl -L https://github.com/Homebrew/brew/tarball/master | tar xz --strip 1 -C homebrew)
         "${HOME}/opt/homebrew/bin/brew" update
     fi
     export HOMEBREW="${HOME}/opt/homebrew"
