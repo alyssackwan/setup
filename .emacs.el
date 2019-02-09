@@ -17,8 +17,8 @@
     ("41c8c11f649ba2832347fe16fe85cf66dafe5213ff4d659182e25378f9cfc183" default)))
  '(debug-on-error t)
  '(default-frame-alist (quote ((fullscreen . maximized))))
- ; '(desktop-save t)
- ; '(desktop-save-mode t)
+ '(desktop-save t)
+ '(desktop-save-mode t)
  '(enable-remote-dir-locals t)
  '(exec-path-from-shell-check-startup-files nil)
  '(global-hl-line-mode t)
@@ -112,7 +112,7 @@
 (defface my-hl-line '((t (:inherit hl-line :background "grey25"))) "my-hl-line face")
 
 (defalias 'yes-or-no-p 'y-or-n-p)
-; (make-directory (expand-file-name "desktop/" user-emacs-directory) :parents)
+(make-directory (expand-file-name "desktop/" user-emacs-directory) :parents)
 (make-directory (expand-file-name "auto-save/" user-emacs-directory) :parents)
 
 (require 'package)
@@ -391,6 +391,7 @@
   :ensure t)
 (use-package cider
   :ensure t
+  :demand t
   :after (clojure-mode company-mode)
   :hook ((cider-repl-mode-hook . company-mode)
          (cider-mode-hook . company-mode))
@@ -512,7 +513,8 @@
   :hook (TeX . company-auctex))
 
 (use-package vagrant-tramp
-  :ensure t)
+  :ensure t
+  :demand t)
 
 ;; pass
 (use-package pass
