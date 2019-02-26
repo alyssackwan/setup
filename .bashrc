@@ -175,7 +175,10 @@ fi
 eval "$(pyenv init -)"
 eval "$(pyenv virtualenv-init -)"
 current_python_version_match=$(pyenv versions | grep "^  ${CURRENT_PYTHON_VERSION_REGEX}$")
-[ ! "${current_python_version_match}" == "  ${CURRENT_PYTHON_VERSION}" ] && pyenv install "${CURRENT_PYTHON_VERSION}"
+if [ ! "${current_python_version_match}" == "  ${CURRENT_PYTHON_VERSION}" ]; then
+    pyenv install "${CURRENT_PYTHON_VERSION}"
+    rm -rf "${HOME}/.beancount"
+fi
 pyenv global system
 # pyenv virtualenvwrapper
 
@@ -260,11 +263,7 @@ if [ "$(uname)" == "Darwin" ]; then
     install emacs "emacs --with-cocoa --with-dbus --with-imagemagick@6 --with-librsvg --with-mailutils --with-modules"
     [ ! -L "${HOME}/Applications/Emacs.app" ] && ln -s "${HOMEBREW}/opt/emacs/Emacs.app" "${HOME}/Applications/"
 elif [ "$(uname)" == "Linux" ]; then
-    if [ -f /etc/debian_version ]; then
-        install emacs25 emacs25
-    else
-        install emacs emacs
-    fi
+    install emacs emacs
 fi
 
 # offlineimap + mu
@@ -284,7 +283,7 @@ fi
 if [ ! -d "${HOME}/.beancount" ]; then
     hg clone https://bitbucket.org/blais/beancount "${HOME}/.beancount"
     pushd "${HOME}/.beancount" > /dev/null
-    pyenv virtualenv 3.7.0 beancount
+    pyenv virtualenv "${CURRENT_PYTHON_VERSION}" beancount
     pyenv shell beancount
     pip install .
     pyenv shell --unset
