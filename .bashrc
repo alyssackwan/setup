@@ -9,8 +9,8 @@ if [ -f /etc/bashrc ]; then
 fi
 
 
-CURRENT_PYTHON_VERSION='3.7.2'
-CURRENT_PYTHON_VERSION_REGEX='3\.7\.2'
+CURRENT_PYTHON_VERSION='3.7.1'
+CURRENT_PYTHON_VERSION_REGEX='3\.7\.1'
 CURRENT_NODE_VERSION='stable'
 
 
@@ -159,6 +159,9 @@ if [ "$(uname)" == "Darwin" ]; then
     install pyenv                   pyenv
     install pyenv-virtualenv        pyenv-virtualenv
     # install pyenv-virtualenvwrapper pyenv-virtualenvwrapper
+    install readline                readline
+    install xz                      xz
+    install zlib                    zlib
 elif [ "$(uname)" == "Linux" ]; then
     install python-pip python-pip
     if [ ! -d "${HOME}/.pyenv" ]; then
@@ -171,12 +174,24 @@ elif [ "$(uname)" == "Linux" ]; then
         export PYENV_ROOT="${HOME}/.pyenv"
         export PATH="${PYENV_ROOT}/bin:${PATH}"
     fi
+    if [ -f /etc/debian_version ]; then
+        install zlib1g-dev zlib1g-dev
+    elif [ -d /etc/redhat-release ]; then
+        install zlib-devel zlib-devel
+    fi
 fi
 eval "$(pyenv init -)"
 eval "$(pyenv virtualenv-init -)"
 current_python_version_match=$(pyenv versions | grep "^  ${CURRENT_PYTHON_VERSION_REGEX}$")
 if [ ! "${current_python_version_match}" == "  ${CURRENT_PYTHON_VERSION}" ]; then
-    pyenv install "${CURRENT_PYTHON_VERSION}"
+    if [ "$(uname)" == "Darwin" ]; then
+        CFLAGS="-I$(brew --prefix readline)/include -I$(brew --prefix openssl)/include -I$(xcrun --show-sdk-path)/usr/include" \
+              LDFLAGS="-L$(brew --prefix readline)/lib -L$(brew --prefix openssl)/lib" \
+              PYTHON_CONFIGURE_OPTS=--enable-unicode=ucs2 \
+              pyenv install "${CURRENT_PYTHON_VERSION}"
+    else
+        pyenv install "${CURRENT_PYTHON_VERSION}"
+    fi
     rm -rf "${HOME}/.beancount"
 fi
 pyenv global system

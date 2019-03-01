@@ -29,7 +29,7 @@
  '(helm-swoop-split-with-multiple-windows nil)
  '(helm-swoop-use-fuzzy-match t)
  '(helm-swoop-use-line-number-face t)
- '(hl-line-face (quote my-hl-line))
+;; '(hl-line-face (quote my-hl-line))
  '(indent-tabs-mode nil)
  '(js-indent-level 2)
  '(js2-basic-offset 2)
@@ -566,7 +566,9 @@
   ("\\.beancount\\.org\\'" . beancount-mode)
   :config (setq beancount-install-dir "~/.pyenv/versions/3.7.0"))
 
-(use-package darcula-theme
+;; (use-package darcula-theme
+;;   :ensure t)
+(use-package moe-theme
   :ensure t)
 
 (let ((path "~/setup/.emacs_secret.el.gpg"))
