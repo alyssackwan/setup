@@ -18,7 +18,7 @@ if [ "$(uname)" == "Darwin" ]; then
     # Homebrew
     if [ ! -d "${HOME}/opt/homebrew" ]; then
         mkdir "${HOME}/opt/homebrew"
-        (cd ~/opt && curl -L https://github.com/Homebrew/homebrew/tarball/master | tar xz --strip 1 -C homebrew)
+        (cd ~/opt && curl -L https://github.com/Homebrew/brew/tarball/master | tar xz --strip 1 -C homebrew)
         "${HOME}/opt/homebrew/bin/brew" update
     fi
     export HOMEBREW="${HOME}/opt/homebrew"
@@ -42,31 +42,63 @@ if [ "$(uname)" == "Darwin" ]; then
     [ x"" == x"$(brew ls --versions gnupg       )" ] && brew install gnupg
 
 elif [ "$(uname)" == "Linux" ]; then
-    if [ -d /etc/redhat-release ]; then
-        sudo yum install git
-    elif [ -f /etc/debian_version ]; then
 
+    # Insync
+    if [ -d /etc/redhat-release ]; then
+        if [ ! -f "/etc/yum.repos.d/insync.repo" ]; then
+            sudo rpm --import https://d2t3ff60b2tol4.cloudfront.net/repomd.xml.key
+            echo | sudo tee "/etc/yum.repos.d/insync.repo" <<EOM
+[insync]
+name=insync repo
+baseurl=http://yum.insynchq.com/[DISTRIBUTION]/$releasever/
+gpgcheck=1
+gpgkey=https://d2t3ff60b2tol4.cloudfront.net/repomd.xml.key
+enabled=1
+metadata_expire=120m
+EOM
+            sudo yum install insync-headless
+        fi
+    elif [ -f /etc/debian_version ]; then
         if [ ! -f "/etc/apt/sources.list.d/insync.list" ]; then
             sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys ACCAF35C
             echo "deb http://apt.insynchq.com/debian stretch non-free contrib" | sudo tee /etc/apt/sources.list.d/insync.list
             sudo apt-get update
             sudo apt-get install insync-headless
         fi
-        if [ ! -d "${HOME}/Google Drive" ]; then
-            insync-headless start
-            echo 'http://www.insynchq.com/auth to get the auth_code.'
-            read -p 'auth_code: ' AUTH_CODE
-            insync-headless add_account -a ${AUTH_CODE}
-            insync-headless move_folder "${HOME}/me@alyssackwan.name" "${HOME}/Google Drive"
-            insync-headless set_autostart yes
-        fi
-
+    elif [ -f /etc/arch_release ]; then
+        sudo pacman -Sy insync
+    fi
+    if [ ! -d "${HOME}/Google Drive" ]; then
+        insync-headless start
+        echo 'http://www.insynchq.com/auth to get the auth_code.'
+        read -p 'auth_code: ' AUTH_CODE
+        insync-headless add_account -a ${AUTH_CODE}
+        insync-headless move_folder "${HOME}/me@alyssackwan.name" "${HOME}/Google Drive"
+        insync-headless set_autostart yes
+    fi
+        
+    if [ -d /etc/redhat-release ]; then
+        sudo yum install git
+    elif [ -f /etc/debian_version ]; then
         sudo -S apt-get install -y git
-
     elif [ -f /etc/arch_release ]; then
         sudo pacman -Sy git
     fi
 fi
+
+init_gpg () {
+    sudo chmod -R a-x .password-store/.gnupg
+    sudo chmod -R u=rwX,g=,o= .password-store/.gnupg
+    cp -r .password-store/.gnupg/. .gnupg/
+    cp -r .password-store/.ssh/. .ssh/
+
+    gpgconf --kill gpg-agent
+    pushd .gnupg > /dev/null
+    gpg --output secret-keys.asc --decrypt secret-keys.asc.gpg
+    gpg --import secret-keys.asc
+    rm secret-keys.asc
+    popd > /dev/null
+}
 
 pushd "${HOME}" > /dev/null
 
@@ -76,17 +108,7 @@ git clone https://github.com/alyssackwan/.password-store.git
 dotglob_shopt=$(shopt -q dotglob)
 shopt -qs dotglob
 
-sudo chmod -R a-x .password-store/.gnupg
-sudo chmod -R u=rwX,g=,o= .password-store/.gnupg
-cp -r .password-store/.gnupg/. .gnupg/
-cp -r .password-store/.ssh/. .ssh/
-
-gpgconf --kill gpg-agent
-pushd .gnupg > /dev/null
-gpg --output secret-keys.asc --decrypt secret-keys.asc.gpg
-gpg --import secret-keys.asc
-rm secret-keys.asc
-popd > /dev/null
+init_gpg
 
 pushd .ssh > /dev/null
 gpg --output id_rsa --decrypt id_rsa.gpg
@@ -101,19 +123,9 @@ git clone git@github.com:alyssackwan/.password-store.git
 dotglob_shopt=$(shopt -q dotglob)
 shopt -qs dotglob
 
-sudo chmod -R a-x .password-store/.gnupg
-sudo chmod -R u=rwX,g=,o= .password-store/.gnupg
-cp -r .password-store/.gnupg/. .gnupg/
-cp -r .password-store/.ssh/. .ssh/
+init_gpg
 
-gpgconf --kill gpg-agent
-pushd .gnupg > /dev/null
-gpg --output secret-keys.asc --decrypt secret-keys.asc.gpg
-gpg --import secret-keys.asc
-rm secret-keys.asc
-popd > /dev/null
-
-echo "Enter the local user's password"
+echo "Enter the OS instance's local user's password (for auto sudo)"
 read -sp 'password: ' PASSWORD
 echo "${PASSWORD}" | gpg --encrypt -o ~/.gnupg/.password.gpg -r 'Alyssa Kwan (unattended)'
 
