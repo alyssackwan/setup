@@ -175,9 +175,12 @@ elif [ "$(uname)" == "Linux" ]; then
         export PATH="${PYENV_ROOT}/bin:${PATH}"
     fi
     if [ -f /etc/debian_version ]; then
-        install zlib1g-dev zlib1g-dev
+        install make            make
+        install zlib1g-dev      zlib1g-dev
+        install libffi-dev      libffi-dev
     elif [ -d /etc/redhat-release ]; then
-        install zlib-devel zlib-devel
+        install zlib-devel      zlib-devel
+        install libffi-devel    libffi-devel
     fi
 fi
 eval "$(pyenv init -)"
