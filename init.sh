@@ -76,7 +76,7 @@ EOM
         insync-headless move_folder "${HOME}/me@alyssackwan.name" "${HOME}/Google Drive"
         insync-headless set_autostart yes
     fi
-        
+
     if [ -d /etc/redhat-release ]; then
         sudo yum install git
     elif [ -f /etc/debian_version ]; then

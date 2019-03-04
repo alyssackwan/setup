@@ -176,9 +176,12 @@ elif [ "$(uname)" == "Linux" ]; then
     fi
     if [ -f /etc/debian_version ]; then
         install make            make
+        install libssl-dev      libssl-dev
         install zlib1g-dev      zlib1g-dev
         install libffi-dev      libffi-dev
+        install python-openssl  python-openssl
     elif [ -d /etc/redhat-release ]; then
+        install openssl-devel   openssl-devel
         install zlib-devel      zlib-devel
         install libffi-devel    libffi-devel
     fi
@@ -238,11 +241,6 @@ fi
 eval "$(rbenv init -)"
 
 # Miscellaneous
-
-# Google Drive
-if [ "$(uname)" == "Linux" ]; then
-    insync-headless set_autostart on
-fi
 
 # pass
 install pass pass
@@ -324,7 +322,7 @@ eval "$(direnv hook bash)"
 
 if [ "$(uname)" == "Linux" ]; then
     if [ "${TILIX}" ] || [ "${VTE_VERSION}" ]; then
-        source "/etc/profile.d/vte.sh"
+        source "/etc/profile.d/vte-2.91.sh"
     fi
 fi
 
