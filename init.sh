@@ -94,6 +94,7 @@ init_gpg () {
 
     gpgconf --kill gpg-agent
     pushd .gnupg > /dev/null
+    echo 'The following prompt is for the decryption key of secret-keys.asc.gpg.'
     gpg --output secret-keys.asc --decrypt secret-keys.asc.gpg
     gpg --import secret-keys.asc
     rm secret-keys.asc
@@ -103,7 +104,7 @@ init_gpg () {
 pushd "${HOME}" > /dev/null
 
 rm -rf .password-store
-git clone https://github.com/alyssackwan/.password-store.git
+git clone https://github.com/jennykwan/.password-store.git
 
 dotglob_shopt=$(shopt -q dotglob)
 shopt -qs dotglob
@@ -111,6 +112,7 @@ shopt -qs dotglob
 init_gpg
 
 pushd .ssh > /dev/null
+echo 'The following prompt is for the decryption key of id_rsa.gpg.'
 gpg --output id_rsa --decrypt id_rsa.gpg
 chmod 400 id_rsa
 popd > /dev/null
@@ -118,7 +120,7 @@ popd > /dev/null
 [ ! "${dotglob_shopt}" ] && shopt -qu dotglob
 
 rm -rf .password-store
-git clone git@github.com:alyssackwan/.password-store.git
+git clone git@github.com:jennykwan/.password-store.git
 
 dotglob_shopt=$(shopt -q dotglob)
 shopt -qs dotglob
@@ -131,7 +133,7 @@ echo "${PASSWORD}" | gpg --encrypt -o ~/.gnupg/.password.gpg -r 'Alyssa Kwan (un
 
 [ ! "${dotglob_shopt}" ] && shopt -qu dotglob
 
-git clone git@github.com:alyssackwan/setup.git
+git clone git@github.com:jennykwan/setup.git
 if [ ! -f "${HOME}/bin" ] && [ ! -d "${HOME}/bin" ] && [ -d "${HOME}/setup/bin" ]; then
     pushd "${HOME}" > /dev/null
     ln -s "./setup/bin" .
