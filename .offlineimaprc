@@ -1,5 +1,5 @@
 [general]
-accounts = jennykwan@countermail.com, alyssackwan@hushmail.com, me@jennykwan.org, superadmin@alyssackwan.name, alyssa.c.kwan@gmail.com, alyssa.kwan@woodlamp.tech
+accounts = jennykwan@countermail.com, alyssackwan@hushmail.com, me@jennykwan.org, jenny.kwan@woodlamp.tech, superadmin@alyssackwan.name, alyssa.c.kwan@gmail.com
 maxsyncaccounts = 4
 pythonfile = ~/setup/.offlineimap.py
 
@@ -83,18 +83,18 @@ remotepasseval = remotepasseval('{HOME}/setup/.offlineimap/alyssa.c.kwan@gmail.c
 folderfilter = lambda foldername: foldername not in ['[Gmail]/All Mail', '[Gmail]/Important']
 sslcacertfile = /usr/lib/ssl/certs/ca-certificates.crt
 
-[Account alyssa.kwan@woodlamp.tech]
-localrepository = local_alyssa.kwan@woodlamp.tech
-remoterepository = remote_alyssa.kwan@woodlamp.tech
+[Account jenny.kwan@woodlamp.tech]
+localrepository = local_jenny.kwan@woodlamp.tech
+remoterepository = remote_jenny.kwan@woodlamp.tech
 
-[Repository local_alyssa.kwan@woodlamp.tech]
+[Repository local_jenny.kwan@woodlamp.tech]
 type = Maildir
-localfolders = ~/.offlineimap.d/maildir/alyssa.kwan@woodlamp.tech
+localfolders = ~/.offlineimap.d/maildir/jenny.kwan@woodlamp.tech
 
-[Repository remote_alyssa.kwan@woodlamp.tech]
+[Repository remote_jenny.kwan@woodlamp.tech]
 type = Gmail
 maxconnections = 2
-remoteuser = alyssa.kwan@woodlamp.tech
-remotepasseval = remotepasseval('{HOME}/setup/.offlineimap/alyssa.kwan@woodlamp.tech.gpg')
+remoteuser = jenny.kwan@woodlamp.tech
+remotepasseval = remotepasseval('{HOME}/setup/.offlineimap/jenny.kwan@woodlamp.tech.gpg')
 folderfilter = lambda foldername: foldername not in ['[Gmail]/All Mail', '[Gmail]/Important']
 sslcacertfile = /usr/lib/ssl/certs/ca-certificates.crt
