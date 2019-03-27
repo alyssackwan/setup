@@ -317,14 +317,14 @@ export PATH="${HOME}/bin_local:${PATH}"
 
 [ -f ~/.bashrc_local ] && source ~/.bashrc_local
 
-# Direnv - Last
-eval "$(direnv hook bash)"
-
 if [ "$(uname)" == "Linux" ]; then
     if [ "${TILIX}" ] || [ "${VTE_VERSION}" ]; then
         source "/etc/profile.d/vte-2.91.sh"
     fi
 fi
+
+# Direnv - Last
+eval "$(direnv hook bash)"
 
 # added by travis gem
 # [ -f /Users/alyssackwan/.travis/travis.sh ] && source /Users/alyssackwan/.travis/travis.sh

@@ -470,10 +470,14 @@
 (use-package js2-mode
   :ensure t
   :mode ("\\.js\\'"))
+(use-package rjsx-mode
+  :ensure t)
 (use-package company-tern
   :ensure t
-  :hook (js2-mode . (lambda ()
-                      (set (make-local-variable 'company-backends) '(company-tern))))
+  :hook ((js2-mode . (lambda ()
+                       (set (make-local-variable 'company-backends) '(company-tern))))
+         (rjsx-mode . (lambda ()
+                       (set (make-local-variable 'company-backends) '(company-tern)))))
   :commands (company-tern))
 
 ;; Web
@@ -544,7 +548,7 @@
  (setq mail-user-agent 'mu4e-user-agent
        mu4e-maildir "~/.offlineimap.d/maildir"
        mu4e-contexts `(,(make-mu4e-context
-                         :name "jennykwan@countermail.com"
+                         :name "_ jennykwan@countermail.com"
                          :vars '((mu4e-drafts-folder . "/jennykwan@countermail.com/Drafts")
                                  (mu4e-sent-folder . "/jennykwan@countermail.com/Sent")
                                  (mu4e-trash-folder . "/jennykwan@countermail.com/Trash")
@@ -552,7 +556,7 @@
                                  (user-mail-address . "jennykwan@countermail.com")
                                  (user-full-name  . "Jenny Kwan")))
                        ,(make-mu4e-context
-                         :name "me@jennykwan.org"
+                         :name "- me@jennykwan.org"
                          :vars '((mu4e-drafts-folder . "/me@jennykwan.org/[Gmail].Drafts")
                                  (mu4e-sent-folder . "/me@jennykwan.org/[Gmail].Sent Mail")
                                  (mu4e-trash-folder . "/me@jennykwan.org/[Gmail].Trash")
@@ -566,7 +570,21 @@
                                  (smtpmail-smtp-server . "smtp.gmail.com")
                                  (smtpmail-smtp-service . 587)))
                        ,(make-mu4e-context
-                         :name "alyssackwan@hushmail.com"
+                         :name "w jenny.kwan@woodlamp.tech"
+                         :vars '((mu4e-drafts-folder . "/jenny.kwan@woodlamp.tech/[Gmail].Drafts")
+                                 (mu4e-sent-folder . "/jenny.kwan@woodlamp.tech/[Gmail].Sent Mail")
+                                 (mu4e-trash-folder . "/jenny.kwan@woodlamp.tech/[Gmail].Trash")
+                                 (mu4e-sent-messages-behavior . 'delete)
+                                 (user-mail-address . "jenny.kwan@woodlamp.tech")
+                                 (user-full-name  . "Jenny Kwan")
+                                 (starttls-use-gnutls . t)
+                                 (smtpmail-starttls-credentials . '(("smtp.gmail.com" 587 nil nil)))
+                                 (smtpmail-auth-credentials . '(("smtp.gmail.com" 587 "jenny.kwan@woodlamp.tech" nil)))
+                                 (smtpmail-default-smtp-server . "smtp.gmail.com")
+                                 (smtpmail-smtp-server . "smtp.gmail.com")
+                                 (smtpmail-smtp-service . 587)))
+                       ,(make-mu4e-context
+                         :name "a alyssackwan@hushmail.com"
                          :vars '((mu4e-drafts-folder . "/alyssackwan@hushmail.com/Drafts")
                                  (mu4e-sent-folder . "/alyssackwan@hushmail.com/Sent")
                                  (mu4e-trash-folder . "/alyssackwan@hushmail.com/Trash")
@@ -580,7 +598,7 @@
                                  (smtpmail-smtp-server . "smtp.hushmail.com")
                                  (smtpmail-smtp-service . 465)))
                        ,(make-mu4e-context
-                         :name "superadmin@alyssackwan.name"
+                         :name "s superadmin@alyssackwan.name"
                          :vars '((mu4e-drafts-folder . "/superadmin@alyssackwan.name/[Gmail].Drafts")
                                  (mu4e-sent-folder . "/superadmin@alyssackwan.name/[Gmail].Sent Mail")
                                  (mu4e-trash-folder . "/superadmin@alyssackwan.name/[Gmail].Trash")
@@ -594,7 +612,7 @@
                                  (smtpmail-smtp-server . "smtp.gmail.com")
                                  (smtpmail-smtp-service . 587)))
                        ,(make-mu4e-context
-                         :name "alyssa.c.kwan@gmail.com"
+                         :name "A alyssa.c.kwan@gmail.com"
                          :vars '((mu4e-drafts-folder . "/alyssa.c.kwan@gmail.com/[Gmail].Drafts")
                                  (mu4e-sent-folder . "/alyssa.c.kwan@gmail.com/[Gmail].Sent Mail")
                                  (mu4e-trash-folder . "/alyssa.c.kwan@gmail.com/[Gmail].Trash")
@@ -604,20 +622,6 @@
                                  (starttls-use-gnutls . t)
                                  (smtpmail-starttls-credentials . '(("smtp.gmail.com" 587 nil nil)))
                                  (smtpmail-auth-credentials . '(("smtp.gmail.com" 587 "alyssa.c.kwan@gmail.com" nil)))
-                                 (smtpmail-default-smtp-server . "smtp.gmail.com")
-                                 (smtpmail-smtp-server . "smtp.gmail.com")
-                                 (smtpmail-smtp-service . 587)))
-                       ,(make-mu4e-context
-                         :name "alyssa.kwan@woodlamp.tech"
-                         :vars '((mu4e-drafts-folder . "/alyssa.kwan@woodlamp.tech/[Gmail].Drafts")
-                                 (mu4e-sent-folder . "/alyssa.kwan@woodlamp.tech/[Gmail].Sent Mail")
-                                 (mu4e-trash-folder . "/alyssa.kwan@woodlamp.tech/[Gmail].Trash")
-                                 (mu4e-sent-messages-behavior . 'delete)
-                                 (user-mail-address . "alyssa.kwan@woodlamp.tech")
-                                 (user-full-name  . "Alyssa Kwan")
-                                 (starttls-use-gnutls . t)
-                                 (smtpmail-starttls-credentials . '(("smtp.gmail.com" 587 nil nil)))
-                                 (smtpmail-auth-credentials . '(("smtp.gmail.com" 587 "alyssa.kwan@woodlamp.tech" nil)))
                                  (smtpmail-default-smtp-server . "smtp.gmail.com")
                                  (smtpmail-smtp-server . "smtp.gmail.com")
                                  (smtpmail-smtp-service . 587)))))
