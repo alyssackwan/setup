@@ -12,5 +12,5 @@ chmod 600 "${HOME}/.ssh/authorized_keys"
 For all OS instances:
 
 ```bash
-pushd "${HOME}" && eval "$(curl -L https://raw.githubusercontent.com/alyssackwan/setup/master/init.sh)" && popd
+pushd "${HOME}" && eval "$(curl -L https://raw.githubusercontent.com/jennykwan/setup/master/init.sh)" && popd
 ```
