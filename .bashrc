@@ -63,16 +63,17 @@ installedp() {
 
 install() {
     installedp "${1}"
+    IFS=' ' read -r -a pkg <<< "${2}"
     if [ $? -ne 0 ]; then
         if [ "$(uname)" == "Darwin" ]; then
-            brew install "${2}"
+            brew install ${pkg[*]}
         elif [ "$(uname)" == "Linux" ]; then
             if [ -d /etc/redhat-release ]; then
-                sudo yum install "${2}"
+                sudo yum install ${pkg[*]}
             elif [ -f /etc/debian_version ]; then
-                echo "${password}" | sudo -S apt-get install -y "${2}"
+                echo "${password}" | sudo -S apt-get install -y ${pkg[*]}
             elif [ -f /etc/arch_release ]; then
-                sudo pacman -Sy "${2}"
+                sudo pacman -Sy ${pkg[*]}
             fi
         fi
     fi
