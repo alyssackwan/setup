@@ -277,8 +277,7 @@ fi
 
 # Emacs
 if [ "$(uname)" == "Darwin" ]; then
-    install emacs "emacs --with-cocoa --with-dbus --with-imagemagick@6 --with-librsvg --with-mailutils --with-modules"
-    [ ! -L "${HOME}/Applications/Emacs.app" ] && ln -s "${HOMEBREW}/opt/emacs/Emacs.app" "${HOME}/Applications/"
+    brew cask install emacs --appdir="${HOME}/Applications/"
 elif [ "$(uname)" == "Linux" ]; then
     install emacs emacs
 fi
