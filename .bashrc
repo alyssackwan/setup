@@ -11,7 +11,8 @@ fi
 
 CURRENT_PYTHON_VERSION='3.7.1'
 CURRENT_PYTHON_VERSION_REGEX='3\.7\.1'
-CURRENT_NODE_VERSION='stable'
+CURRENT_NODE_VERSION='v11.14.0'
+CURRENT_NODE_VERSION_REGEX='v11\.14\.0'
 
 
 if [ "$(uname)" == "Darwin" ]; then
@@ -226,7 +227,7 @@ elif [ "$(uname)" == "Linux" ]; then
     fi
     source "${NVM_DIR}/nvm.sh"
 fi
-[ ! $(nvm version node | grep "${CURRENT_NODE_VERSION}") ] && nvm install "${CURRENT_NODE_VERSION}" && nvm alias default "${CURRENT_NODE_VERSION}"
+[ ! $(nvm version node | grep "${CURRENT_NODE_VERSION_REGEX}") ] && nvm install "${CURRENT_NODE_VERSION}" && nvm alias default "${CURRENT_NODE_VERSION}"
 [ $(npm list --depth 0 --global tern > /dev/null 2>&1) ] && npm install -g tern
 
 # Ruby
@@ -277,7 +278,7 @@ fi
 
 # Emacs
 if [ "$(uname)" == "Darwin" ]; then
-    brew cask install emacs --appdir="${HOME}/Applications/"
+    [ x"" != x"$(brew ls | egrep ^emacs\(-\([0-9.]+\|dev\)\)?\(:amd64\)?$)" ] && brew cask install emacs --appdir="${HOME}/Applications/"
 elif [ "$(uname)" == "Linux" ]; then
     install emacs emacs
 fi
