@@ -6,6 +6,9 @@ if [ "$(uname)" == "Darwin" ]; then
         echo "Please install and configure insync."
         exit 1
     fi
+    
+    xcode-select --install
+    sudo installer -pkg /Library/Developer/CommandLineTools/Packages/macOS_SDK_headers_for_macOS_10.14.pkg -target /
 
     # make sure opt exists
     if [ ! -d "${HOME}/opt" ]; then
