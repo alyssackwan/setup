@@ -324,6 +324,11 @@ if [ "$(uname)" == "Linux" ]; then
     fi
 fi
 
+export GIT_AUTHOR_NAME='Jenny Kwan'
+export GIT_AUTHOR_EMAIL='me@jennykwan.org'
+export GIT_COMMITTER_NAME="${GIT_AUTHOR_NAME}"
+export GIT_COMMITTER_EMAIL="${GIT_AUTHOR_EMAIL}"
+
 # Direnv - Last
 eval "$(direnv hook bash)"
 

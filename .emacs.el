@@ -102,6 +102,8 @@
  '(show-trailing-whitespace t)
  '(truncate-lines t)
  '(visible-bell nil)
+ '(web-mode-code-indent-offset 2)
+ '(web-mode-css-indent-offset 2)
  '(web-mode-markup-indent-offset 2))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -468,28 +470,34 @@
 
 ;; JavaScript
 (use-package js2-mode
-  :ensure t
-  :mode ("\\.js\\'"))
+  :ensure t)
 (use-package rjsx-mode
   :ensure t)
-(use-package company-tern
-  :ensure t
-  :hook ((js2-mode . (lambda ()
-                       (set (make-local-variable 'company-backends) '(company-tern))))
-         (rjsx-mode . (lambda ()
-                       (set (make-local-variable 'company-backends) '(company-tern)))))
-  :commands (company-tern))
 
 ;; Web
 (use-package web-mode
-  :mode ("\\.phtml\\'"
+  :mode ("\\.jsx?\\'"
+         "\\.phtml\\'"
          "\\.tpl\\.php\\'"
          "\\.[agj]sp\\'"
          "\\.as[cp]x\\'"
          "\\.erb\\'"
          "\\.mustache\\'"
          "\\.djhtml\\'"
-         "\\.html?\\'"))
+         "\\.html?\\'")
+  :hook (web-mode . (lambda ()
+                      (when (equal web-mode-content-type "javascript")
+                        (web-mode-set-content-type "jsx")))))
+
+(use-package company-tern
+  :ensure t
+  :hook ((js2-mode . (lambda ()
+                       (set (make-local-variable 'company-backends) '(company-tern))))
+         (rjsx-mode . (lambda ()
+                        (set (make-local-variable 'company-backends) '(company-tern))))
+         (web-mode . (lambda ()
+                       (set (make-local-variable 'company-backends) '(company-tern)))))
+  :commands (company-tern))
 
 ;; Ruby
 (use-package groovy-mode
