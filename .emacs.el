@@ -104,7 +104,9 @@
  '(visible-bell nil)
  '(web-mode-code-indent-offset 2)
  '(web-mode-css-indent-offset 2)
- '(web-mode-markup-indent-offset 2))
+ '(web-mode-markup-indent-offset 2)
+ '(web-mode-script-padding 2)
+ '(web-mode-attr-indent-offset 2))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -476,6 +478,7 @@
 
 ;; Web
 (use-package web-mode
+  :ensure t
   :mode ("\\.jsx?\\'"
          "\\.phtml\\'"
          "\\.tpl\\.php\\'"
