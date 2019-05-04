@@ -76,7 +76,7 @@ EOM
         echo 'http://www.insynchq.com/auth to get the auth_code.'
         read -p 'auth_code: ' AUTH_CODE
         insync-headless add_account -a ${AUTH_CODE}
-        insync-headless move_folder "${HOME}/me@alyssackwan.name" "${HOME}/Google Drive"
+        insync-headless move_folder "${HOME}/me@jennykwan.org" "${HOME}/Google Drive"
         insync-headless set_autostart yes
     fi
 
@@ -132,7 +132,7 @@ init_gpg
 
 echo "Enter the OS instance's local user's password (for auto sudo)"
 read -sp 'password: ' PASSWORD
-echo "${PASSWORD}" | gpg --encrypt -o ~/.gnupg/.password.gpg -r 'Alyssa Kwan (unattended)'
+echo "${PASSWORD}" | gpg --encrypt -o ~/.gnupg/.password.gpg -r 'Jenny Kwan (unattended)'
 
 [ ! "${dotglob_shopt}" ] && shopt -qu dotglob
 
