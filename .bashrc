@@ -63,9 +63,9 @@ installedp() {
 }
 
 install() {
-    installedp "${1}"
     args=( "$@" )
     args_after_second="${args[@]:2}"
+    installedp "${1}"
     if [ $? -ne 0 ]; then
         if [ "$(uname)" == "Darwin" ]; then
             brew install "${args_after_second[@]}"
