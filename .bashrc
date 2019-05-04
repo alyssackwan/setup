@@ -64,17 +64,18 @@ installedp() {
 
 install() {
     installedp "${1}"
-    IFS=' ' read -r -a pkg <<< "${2}"
+    args=( "$@" )
+    args_after_second="${args[@]:2}"
     if [ $? -ne 0 ]; then
         if [ "$(uname)" == "Darwin" ]; then
-            brew install ${pkg[*]}
+            brew install "${args_after_second[@]}"
         elif [ "$(uname)" == "Linux" ]; then
             if [ -d /etc/redhat-release ]; then
-                sudo yum install ${pkg[*]}
+                sudo yum install "${args_after_second[@]}"
             elif [ -f /etc/debian_version ]; then
-                echo "${password}" | sudo -S apt-get install -y ${pkg[*]}
+                echo "${password}" | sudo -S apt-get install -y "${args_after_second[@]}"
             elif [ -f /etc/arch_release ]; then
-                sudo pacman -Sy ${pkg[*]}
+                sudo pacman -Sy "${args_after_second[@]}"
             fi
         fi
     fi
