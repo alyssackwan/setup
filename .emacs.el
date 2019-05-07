@@ -29,7 +29,6 @@
  '(helm-swoop-split-with-multiple-windows nil)
  '(helm-swoop-use-fuzzy-match t)
  '(helm-swoop-use-line-number-face t)
-;; '(hl-line-face (quote my-hl-line))
  '(indent-tabs-mode nil)
  '(js-indent-level 2)
  '(js2-basic-offset 2)
@@ -113,7 +112,6 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
-(defface my-hl-line '((t (:inherit hl-line :background "grey25"))) "my-hl-line face")
 
 (defalias 'yes-or-no-p 'y-or-n-p)
 (make-directory (expand-file-name "desktop/" user-emacs-directory) :parents)
@@ -172,10 +170,10 @@
 (use-package exec-path-from-shell
   :ensure t
   :demand t
-  :config (when (memq window-system '(mac ns))
-            (exec-path-from-shell-initialize)
-            (exec-path-from-shell-copy-env "MANPATH")
-            (exec-path-from-shell-copy-env "GOPATH")))
+  :config
+  (exec-path-from-shell-initialize)
+  (exec-path-from-shell-copy-env "MANPATH")
+  (exec-path-from-shell-copy-env "GOPATH"))
 
 (use-package epg
   :ensure t)
@@ -321,7 +319,7 @@
   :demand t
   :commands (company-complete)
   :config (global-company-mode)
-  :bind (("M-<tab>" . company-complete)))
+  :bind (("C-<tab>" . company-complete)))
 
 ;; Helm
 (use-package helm
@@ -490,7 +488,8 @@
          "\\.html?\\'")
   :hook (web-mode . (lambda ()
                       (when (equal web-mode-content-type "javascript")
-                        (web-mode-set-content-type "jsx")))))
+                        (web-mode-set-content-type "jsx"))
+                      (company-mode))))
 
 (use-package company-tern
   :ensure t
@@ -502,6 +501,19 @@
                        (set (make-local-variable 'company-backends) '(company-tern)))))
   :commands (company-tern))
 
+(use-package company-web
+  :ensure t)
+
+(defadvice company-tern (before web-mode-set-up-ac-sources activate)
+  "Set `tern-mode' based on current language before running company-tern."
+  (if (equal major-mode 'web-mode)
+      (let ((web-mode-cur-language
+             (web-mode-language-at-pos)))
+        (if (or (string= web-mode-cur-language "jsx")
+                (string= web-mode-cur-language "javascript"))
+            (unless tern-mode (tern-mode))
+          (if tern-mode (tern-mode))))))
+
 ;; Ruby
 (use-package groovy-mode
   :ensure t)
@@ -512,6 +524,11 @@
   :hook (rhtml-mode . rinari-launch)
   :commands (rinari-launch))
 
+;; Agda
+(use-package agda2-mode
+  :mode ("\\.agda'"))
+
+;; YAML
 (use-package yaml-mode
   :ensure t)
 

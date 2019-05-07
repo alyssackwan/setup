@@ -243,6 +243,17 @@ elif [ "$(uname)" == "Linux" ]; then
 fi
 eval "$(rbenv init -)"
 
+# Agda
+if [ "$(uname)" == "Linux" ]; then
+    if [ -f /etc/debian_version ]; then
+        install zlib1g-dev zlib1g-dev
+        install libncurses5-dev libncurses5-dev
+        install agda-mode agda-mode
+        install agda-stdlib agda-stdlib
+        install elpa-agda2-mode elpa-agda2-mode
+    fi
+fi
+
 # Miscellaneous
 
 # pass
