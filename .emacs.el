@@ -22,6 +22,7 @@
  '(enable-remote-dir-locals t)
  '(exec-path-from-shell-check-startup-files nil)
  '(global-hl-line-mode t)
+ '(global-linum-mode t)
  '(helm-command-prefix-key "C-x h")
  '(helm-swoop-move-to-line-cycle t)
  '(helm-swoop-speed-or-color t)
