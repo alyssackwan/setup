@@ -1,0 +1,5 @@
+autopep8==1.4.4
+flake8==3.7.8
+importmagic==0.1.7
+jedi==0.15.1
+yapf==0.28.0
