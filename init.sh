@@ -65,8 +65,10 @@ EOM
         if [ ! -f "/etc/apt/sources.list.d/insync.list" ]; then
             sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys ACCAF35C
             echo "deb http://apt.insync.io/ubuntu focal non-free contrib" | sudo tee /etc/apt/sources.list.d/insync.list
-            sudo apt-get update
-            sudo apt-get install insync-headless
+            pushd /tmp
+            wget https://d2t3ff60b2tol4.cloudfront.net/builds/insync-headless_1.5.7.37371-wheezy_amd64.deb
+            dpkg -i insync-headless_1.5.7.37371-wheezy_amd64.deb
+            popd
         fi
     elif [ -f /etc/arch_release ]; then
         sudo pacman -Sy insync
