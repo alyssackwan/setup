@@ -9,8 +9,8 @@ if [ -f /etc/bashrc ]; then
 fi
 
 
-CURRENT_PYTHON_VERSION='3.7.1'
-CURRENT_PYTHON_VERSION_REGEX='3\.7\.1'
+CURRENT_PYTHON_VERSION='3.7.4'
+CURRENT_PYTHON_VERSION_REGEX='3\.7\.4'
 CURRENT_NODE_VERSION='v11.14.0'
 CURRENT_NODE_VERSION_REGEX='v11\.14\.0'
 
@@ -165,6 +165,7 @@ if [ "$(uname)" == "Darwin" ]; then
     install readline                readline
     install xz                      xz
     install zlib                    zlib
+    install pipenv                  pipenv
 elif [ "$(uname)" == "Linux" ]; then
     install python-pip python-pip
     if [ ! -d "${HOME}/.pyenv" ]; then
@@ -183,16 +184,18 @@ elif [ "$(uname)" == "Linux" ]; then
         install zlib1g-dev      zlib1g-dev
         install libffi-dev      libffi-dev
         install python-openssl  python-openssl
+        install pipenv          pipenv
     elif [ -d /etc/redhat-release ]; then
         install openssl-devel   openssl-devel
         install zlib-devel      zlib-devel
         install libffi-devel    libffi-devel
+        install pipenv          pipenv
     fi
 fi
 eval "$(pyenv init -)"
 eval "$(pyenv virtualenv-init -)"
-current_python_version_match=$(pyenv versions | grep "^  ${CURRENT_PYTHON_VERSION_REGEX}$")
-if [ ! "${current_python_version_match}" == "  ${CURRENT_PYTHON_VERSION}" ]; then
+current_python_version_match="$(pyenv versions | grep '^[ *] '"${CURRENT_PYTHON_VERSION_REGEX}"'\( (set by '"${HOME}"'/.pyenv/version)\)\?$')"
+if [ ! "${current_python_version_match}" == "  ${CURRENT_PYTHON_VERSION}" ] && [ ! "${current_python_version_match}" == "* ${CURRENT_PYTHON_VERSION} (set by ${HOME}/.pyenv/version)" ]; then
     if [ "$(uname)" == "Darwin" ]; then
         CFLAGS="-I$(brew --prefix readline)/include -I$(brew --prefix openssl)/include -I$(xcrun --show-sdk-path)/usr/include" \
               LDFLAGS="-L$(brew --prefix readline)/lib -L$(brew --prefix openssl)/lib" \
@@ -203,8 +206,9 @@ if [ ! "${current_python_version_match}" == "  ${CURRENT_PYTHON_VERSION}" ]; the
     fi
     rm -rf "${HOME}/.beancount"
 fi
-pyenv global system
+pyenv global "${CURRENT_PYTHON_VERSION}"
 # pyenv virtualenvwrapper
+eval "$(pipenv --completion)"
 
 # Java
 if [ ! -d "${HOME}/.emacs.d/eclipse.jdt.ls/server/" ]; then
@@ -243,13 +247,32 @@ elif [ "$(uname)" == "Linux" ]; then
 fi
 eval "$(rbenv init -)"
 
+# Perl
+if [ "$(uname)" == "Linux" ]; then
+    if [ -f /etc/debian_version ]; then
+        install perl    perl
+
+        # cpan RPC::EPC::Service
+        # cpan DBI
+        # cpan DBD::SQLite
+        # cpan DBD::Pg
+        # cpan DBD::mysql
+
+        PATH="${HOME}/perl5/bin${PATH:+:${PATH}}"; export PATH;
+        PERL5LIB="${HOME}/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"; export PERL5LIB;
+        PERL_LOCAL_LIB_ROOT="${HOME}/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"; export PERL_LOCAL_LIB_ROOT;
+        PERL_MB_OPT="--install_base \"${HOME}/perl5\""; export PERL_MB_OPT;
+        PERL_MM_OPT="INSTALL_BASE=${HOME}/perl5"; export PERL_MM_OPT;
+    fi
+fi
+
 # Agda
 if [ "$(uname)" == "Linux" ]; then
     if [ -f /etc/debian_version ]; then
-        install zlib1g-dev zlib1g-dev
+        install zlib1g-dev      zlib1g-dev
         install libncurses5-dev libncurses5-dev
-        install agda-mode agda-mode
-        install agda-stdlib agda-stdlib
+        install agda-mode       agda-mode
+        install agda-stdlib     agda-stdlib
         install elpa-agda2-mode elpa-agda2-mode
     fi
 fi

@@ -21,6 +21,9 @@
  '(desktop-save-mode t)
  '(enable-remote-dir-locals t)
  '(exec-path-from-shell-check-startup-files nil)
+ '(exec-path-from-shell-variables (quote ("PATH" "MANPATH" "GOPATH" "PERL5LIB")))
+ '(flycheck-pycheckers-checkers '(flake8 mypy3))
+ '(flycheck-pycheckers-max-line-length 88)
  '(global-hl-line-mode t)
  '(global-linum-mode t)
  '(helm-command-prefix-key "C-x h")
@@ -172,9 +175,7 @@
   :ensure t
   :demand t
   :config
-  (exec-path-from-shell-initialize)
-  (exec-path-from-shell-copy-env "MANPATH")
-  (exec-path-from-shell-copy-env "GOPATH"))
+  (exec-path-from-shell-initialize))
 
 (use-package epg
   :ensure t)
@@ -319,8 +320,8 @@
   :ensure t
   :demand t
   :commands (company-complete)
-  :config (global-company-mode)
-  :bind (("C-<tab>" . company-complete)))
+  :bind (("C-<tab>" . company-complete))
+  :hook ((emacs-lisp-mode-hook . company-mode)))
 
 ;; Helm
 (use-package helm
@@ -363,11 +364,14 @@
          ("C-c M-s" . helm-multi-swoop)
          ("C-c M-S" . helm-multi-swoop-all)))
 
+;; Flymake
+(use-package flymake
+  :straight t
+  :ensure t)
+
 ;; Flycheck
 (use-package flycheck
-  :ensure t
-  :demand t
-  :config (global-flycheck-mode))
+  :ensure t)
 
 ;; Magit
 (use-package magit
@@ -376,6 +380,9 @@
   :bind (("C-x g" . magit-status)
          ("C-x M-g" . magit-dispatch-popup)))
 
+(use-package eglot
+  :straight t
+  :ensure t)
 (use-package lsp-mode
   :ensure t
   :demand t)
@@ -387,11 +394,17 @@
   :ensure t
   :demand t
   :after (lsp-mode company))
+(use-package helm-lsp
+  :ensure t
+  :commands helm-lsp-workspace-symbol
+  :after (lsp-mode helm))
 
 ;; Clojure
 ;; Cider
 (use-package clojure-mode
-  :ensure t)
+  :ensure t
+  :after (company)
+  :hook ((clojure-mode-hook . company-mode)))
 (use-package cider
   :ensure t
   :demand t
@@ -456,18 +469,50 @@
   :commands (company-go))
 
 ;; Python
+(add-hook 'python-mode-hook (lambda ()
+                              (set (make-local-variable 'forward-sexp-function) nil)))
 (use-package pyenv-mode-auto
+  :ensure t
+  :demand t)
+(use-package anaconda-mode
+  :ensure t
+  :after (company-anaconda)
+  :hook ((anaconda-mode . (lambda ()
+                            (set (make-local-variable 'company-backends) '(company-anaconda))
+                            (company-mode)))
+         (python-mode . (lambda ()
+                          (anaconda-mode)
+                          (anaconda-eldoc-mode)))))
+(use-package company-anaconda
   :ensure t)
+(use-package flycheck-pycheckers
+  :ensure t
+  :hook ((python-mode . flycheck-mode)
+         (flycheck-mode . flycheck-pycheckers-setup)))
+(use-package blacken
+  :ensure t
+  :hook (python-mode . (lambda ()
+                         (add-hook 'before-save-hook 'blacken-buffer nil 't))))
 ;; (use-package lsp-python
 ;;   :ensure t
 ;;   :commands (lsp-python-enable)
 ;;   :hook (python-mode . lsp-python-enable))
+(use-package pipenv
+  :ensure t
+  :hook (python-mode . pipenv-mode)
+  :init
+  (defun my-pipenv-projectile-after-switch ()
+    (interactive)
+    (let ((default-directory (pipenv-project?)))
+      (when default-directory
+        (pipenv-projectile-after-switch-default))))
+  (setq pipenv-projectile-after-switch-function #'my-pipenv-projectile-after-switch))
 
 ;; Java
 (use-package lsp-java
   :ensure t
-  :commands (lsp-java-enable)
-  :hook (java-mode . lsp-java-enable))
+  :commands (lsp)
+  :hook (java-mode . lsp))
 
 ;; JavaScript
 (use-package js2-mode
@@ -476,6 +521,7 @@
   :ensure t)
 
 ;; Web
+
 (use-package web-mode
   :ensure t
   :mode ("\\.jsx?\\'"
@@ -514,6 +560,22 @@
                 (string= web-mode-cur-language "javascript"))
             (unless tern-mode (tern-mode))
           (if tern-mode (tern-mode))))))
+
+;; SQL
+(use-package edbi
+  :ensure t
+  :demand t)
+(use-package edbi-minor-mode
+  :ensure t
+  :after (edbi)
+  :commands (edbi-minor-mode)
+  :hook ((sql-mode . edbi-minor-mode)))
+(use-package company-edbi
+  :ensure t
+  :after (company edbi edbi-minor-mode)
+  :hook ((edbi-minor-mode . (lambda ()
+                              (set (make-local-variable 'company-backends) '(company-edbi))
+                              (company-mode)))))
 
 ;; Ruby
 (use-package groovy-mode
