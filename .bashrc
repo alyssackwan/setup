@@ -167,7 +167,7 @@ if [ "$(uname)" == "Darwin" ]; then
     install zlib                    zlib
     install pipenv                  pipenv
 elif [ "$(uname)" == "Linux" ]; then
-    install python-pip python-pip
+    install python3-pip python3-pip
     if [ ! -d "${HOME}/.pyenv" ]; then
         git clone https://github.com/pyenv/pyenv.git "${HOME}/.pyenv"
         export PYENV_ROOT="${HOME}/.pyenv"
