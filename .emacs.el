@@ -538,15 +538,15 @@
                         (web-mode-set-content-type "jsx"))
                       (company-mode))))
 
-(use-package company-tern
-  :ensure t
-  :hook ((js2-mode . (lambda ()
-                       (set (make-local-variable 'company-backends) '(company-tern))))
-         (rjsx-mode . (lambda ()
-                        (set (make-local-variable 'company-backends) '(company-tern))))
-         (web-mode . (lambda ()
-                       (set (make-local-variable 'company-backends) '(company-tern)))))
-  :commands (company-tern))
+;; (use-package company-tern
+;;   :ensure t
+;;   :hook ((js2-mode . (lambda ()
+;;                        (set (make-local-variable 'company-backends) '(company-tern))))
+;;          (rjsx-mode . (lambda ()
+;;                         (set (make-local-variable 'company-backends) '(company-tern))))
+;;          (web-mode . (lambda ()
+;;                        (set (make-local-variable 'company-backends) '(company-tern)))))
+;;   :commands (company-tern))
 
 (use-package company-web
   :ensure t)
@@ -562,20 +562,20 @@
           (if tern-mode (tern-mode))))))
 
 ;; SQL
-(use-package edbi
-  :ensure t
-  :demand t)
-(use-package edbi-minor-mode
-  :ensure t
-  :after (edbi)
-  :commands (edbi-minor-mode)
-  :hook ((sql-mode . edbi-minor-mode)))
-(use-package company-edbi
-  :ensure t
-  :after (company edbi edbi-minor-mode)
-  :hook ((edbi-minor-mode . (lambda ()
-                              (set (make-local-variable 'company-backends) '(company-edbi))
-                              (company-mode)))))
+;; (use-package edbi
+;;   :ensure t
+;;   :demand t)
+;; (use-package edbi-minor-mode
+;;   :ensure t
+;;   :after (edbi)
+;;   :commands (edbi-minor-mode)
+;;   :hook ((sql-mode . edbi-minor-mode)))
+;; (use-package company-edbi
+;;   :ensure t
+;;   :after (company edbi edbi-minor-mode)
+;;   :hook ((edbi-minor-mode . (lambda ()
+;;                               (set (make-local-variable 'company-backends) '(company-edbi))
+;;                               (company-mode)))))
 
 ;; Ruby
 (use-package groovy-mode
