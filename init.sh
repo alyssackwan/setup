@@ -100,7 +100,7 @@ init_gpg () {
 
     gpgconf --kill gpg-agent
     pushd .gnupg > /dev/null
-    echo 'The following prompt is for the decryption key of secret-keys.asc.gpg.'
+    read -s -n 1 -p 'The following prompt is for the decryption key of secret-keys.asc.gpg...'
     gpg --output secret-keys.asc --decrypt secret-keys.asc.gpg
     gpg --import secret-keys.asc
     rm secret-keys.asc
@@ -118,7 +118,7 @@ shopt -qs dotglob
 init_gpg
 
 pushd .ssh > /dev/null
-echo 'The following prompt is for the decryption key of id_rsa.gpg.'
+read -s -n 1 -p 'The following prompt is for the decryption key of id_rsa.gpg...'
 gpg --output id_rsa --decrypt id_rsa.gpg
 chmod 400 id_rsa
 popd > /dev/null
