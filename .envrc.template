@@ -1,0 +1,7 @@
+export USER_HOME="${HOME}/Users/..."
+
+export GIT_AUTHOR_NAME="Jenny Kwan"
+export GIT_AUTHOR_EMAIL="..."
+export GIT_COMMITTER_NAME="${GIT_AUTHOR_NAME}"
+export GIT_COMMITTER_EMAIL="${GIT_AUTHOR_EMAIL}"
+export GIT_SSH_COMMAND="ssh -o IdentitiesOnly=yes -i ${USER_HOME}/.ssh/id_rsa"
